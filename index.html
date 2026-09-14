@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EFF1F3">
+<meta name="description" content="Daily practice trainer for the ASE P2 Automobile Parts Specialist certification test.">
+<title>ASE P2 daily drill</title>
+<style>html,body{margin:0;padding:0;background:#EFF1F3}</style>
+</head>
+<body>
+<style>
+  :root{
+    --paper:#EFF1F3; --card:#FFFFFF; --ink:#14191F; --muted:#5C6672;
+    --line:#D7DCE1; --blue:#17457A; --blue-dk:#0F3157;
+    --ok:#1B7A4B; --ok-bg:#E7F3EC; --no:#B4342A; --no-bg:#FBEAE8;
+    --gold:#E5A823;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  #app{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--paper); color:var(--ink); min-height:100vh;
+    padding:16px 14px 40px; max-width:560px; margin:0 auto;
+    font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  #app h1{font-size:21px;line-height:1.25;font-weight:700;letter-spacing:-.01em;margin:0 0 2px}
+  #app h2{font-size:15px;font-weight:700;margin:0 0 10px}
+  #app p{margin:0 0 10px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 18px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 14px;margin-bottom:14px}
+
+  /* blueprint hero */
+  .bp-row{display:grid;grid-template-columns:118px 1fr 40px;align-items:center;gap:8px;margin-bottom:7px}
+  .bp-name{font-size:12.5px;color:var(--muted);line-height:1.2}
+  .bp-track-wrap{height:15px}
+  .bp-track{height:15px;background:#E2E6EA;border-radius:3px;overflow:hidden}
+  .bp-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .5s ease}
+  .bp-fill.thin{background:#9AA6B2}
+  .bp-pct{font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+  .bp-note{font-size:12.5px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+
+  .streak{display:flex;align-items:baseline;gap:8px;margin-bottom:12px}
+  .streak b{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1}
+  .streak span{font-size:13.5px;color:var(--muted)}
+  .week{display:flex;gap:5px;margin-bottom:4px}
+  .dot{flex:1;height:6px;border-radius:3px;background:#DDE2E7}
+  .dot.on{background:var(--gold)}
+
+  button{font:inherit;cursor:pointer}
+  .btn{display:block;width:100%;padding:14px;border-radius:9px;border:1px solid var(--blue);
+       background:var(--blue);color:#fff;font-size:16px;font-weight:600;margin-bottom:9px;text-align:left}
+  .btn:active{background:var(--blue-dk)}
+  .btn small{display:block;font-weight:400;font-size:12.5px;opacity:.82;margin-top:2px}
+  .btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
+  .btn.ghost small{opacity:1;color:var(--muted)}
+  .btn[disabled]{opacity:.45;cursor:default}
+  .btn:focus-visible,.opt:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+  /* quiz */
+  .bar{height:3px;background:#DDE2E7;border-radius:2px;margin-bottom:12px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--ink);transition:width .25s}
+  .meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:12px}
+  .qtext{font-size:17.5px;line-height:1.45;font-weight:500;margin-bottom:14px}
+  .opt{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);
+       border-radius:9px;padding:13px 13px;margin-bottom:8px;font-size:15.5px;line-height:1.4;color:var(--ink)}
+  .opt:active{border-color:var(--blue)}
+  .opt .ltr{font-weight:700;margin-right:7px;color:var(--muted)}
+  .opt.correct{background:var(--ok-bg);border-color:var(--ok)}
+  .opt.correct .ltr{color:var(--ok)}
+  .opt.wrong{background:var(--no-bg);border-color:var(--no)}
+  .opt.wrong .ltr{color:var(--no)}
+  .opt[disabled]{cursor:default}
+  .fb{border-left:3px solid var(--line);padding:2px 0 2px 12px;margin:14px 0 16px;font-size:14.5px;line-height:1.5}
+  .fb.ok{border-color:var(--ok)} .fb.no{border-color:var(--no)}
+  .fb b{display:block;margin-bottom:3px}
+  .fb.ok b{color:var(--ok)} .fb.no b{color:var(--no)}
+
+  .score{font-size:44px;font-weight:700;letter-spacing:-.03em;line-height:1}
+  .score span{font-size:17px;font-weight:400;color:var(--muted);letter-spacing:0}
+  .verdict{font-size:14.5px;margin:8px 0 0}
+  .miss{font-size:14px;border-top:1px solid var(--line);padding:10px 0}
+  .miss em{display:block;font-style:normal;color:var(--muted);font-size:12.5px;margin-bottom:2px}
+  .tiny{font-size:12px;color:var(--muted);text-align:center;margin-top:14px}
+  .clock{font-variant-numeric:tabular-nums}
+  .clock.low{color:var(--no);font-weight:600}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<div id="app"><p class="sub">Loading your progress&hellip;</p></div>
+<script>
+const Q=[
+{a:"A",t:"General operations",q:"A part costs the store $48.00. Store policy is a 40% gross margin. What is the selling price?",o:["$67.20","$76.80","$80.00","$120.00"],c:2,e:"Margin is figured on the selling price, so divide: 48 \u00f7 (1 \u2212 0.40) = $80.00. Multiplying by 1.40 gives a 40% markup, which is a different number."},
+{a:"A",t:"General operations",q:"A customer gets 20% off, then another 10% off, on a $150.00 list item. What do they pay?",o:["$105.00","$108.00","$110.00","$112.50"],c:1,e:"Stacked discounts multiply, they never add: 150 \u00d7 0.80 \u00d7 0.90 = $108.00."},
+{a:"A",t:"General operations",q:"Which battery is the best value per month of warranty?",o:["$89.95 / 36 months","$109.95 / 48 months","$129.95 / 60 months","$179.95 / 84 months"],c:3,e:"Divide price by months: $2.50, $2.29, $2.17, $2.14. The priciest battery has the lowest cost per month."},
+{a:"A",t:"General operations",q:"Which connecting rod bearing set is twenty thousandths of an inch undersize?",o:["4820 - .0002","4820 - .002","4820 - .020","4820 - .200"],c:2,e:"Twenty thousandths is .020. Watch the decimal places \u2014 .002 is two thousandths."},
+{a:"A",t:"Fasteners",q:"A bolt head stamped with three radial lines is a:",o:["ungraded bolt","grade 2","grade 5","grade 8"],c:2,e:"No marks is grade 2, three lines is grade 5, six lines is grade 8. Metric bolts use stamped numbers instead."},
+{a:"A",t:"Fasteners",q:"In a fastener described as M12-1.75 \u00d7 40, the 1.75 is the:",o:["threads per inch","millimeters between threads","threaded length in centimeters","tensile strength class"],c:1,e:"Metric fasteners are diameter\u2013pitch\u2013length, and pitch is the distance between threads. SAE uses threads per inch, the opposite convention."},
+{a:"A",t:"Safety and hazmat",q:"All of these are acceptable at the counter EXCEPT:",o:["providing an SDS on request","storing flammables in an approved cabinet","pouring used antifreeze down the floor drain","neutralizing spilled battery acid with baking soda"],c:2,e:"Used antifreeze is a regulated waste and goes to approved recycling, never a drain."},
+{a:"A",t:"General operations",q:"Four rotors at $62.50 and two pad sets at $44.95, with 15% off the order. Pre-tax total:",o:["$255.40","$288.92","$297.50","$340.26"],c:1,e:"$250.00 + $89.90 = $339.90, then \u00d7 0.85 = $288.92."},
+{a:"A",t:"Fasteners",q:"Specialist A says a 3/8-16 bolt is 3/8 inch diameter with 16 threads per inch. Specialist B says the 16 means it is 16 mm long. Who is right?",o:["A only","B only","Both A and B","Neither A nor B"],c:0,e:"A has the SAE convention right. B is mixing it up with metric length."},
+{a:"A",t:"General operations",q:"A customer wants a part the store does not stock and will not reorder. The first action is to:",o:["say the part is unavailable","offer a special order and explain any deposit or handling charge","sell the closest similar part on the shelf","send them to a competitor"],c:1,e:"Special orders are a listed P2 task. Disclose deposits and handling charges up front so there is no dispute later."},
+{a:"A",t:"Security and fraud",q:"Which is the strongest fraud signal at the counter?",o:["A wholesale customer asking for a quote","A cash return with a valid receipt","A phone order for high-value electronics, card not present, picked up by a third party","A retail customer paying by check with ID"],c:2,e:"Card-not-present plus high value plus third-party pickup is the classic pattern. The others are ordinary transactions."},
+{a:"A",t:"Measuring",q:"A micrometer shows .275 on the sleeve and 12 on the thimble. The reading is:",o:[".275 in",".287 in",".312 in",".375 in"],c:1,e:"Add the thimble thousandths to the sleeve: .275 + .012 = .287."},
+{a:"A",t:"General operations",q:"Good back-room housekeeping supports all of these EXCEPT:",o:["faster order pulling","accurate physical inventory counts","reduced injury risk","a higher markup on each sale"],c:3,e:"Housekeeping affects speed, accuracy and safety. Markup is a pricing decision, not a storage one."},
+{a:"A",t:"General operations",q:"A part lists at $210.00 and costs the store $140.00. The gross profit margin is:",o:["33.3%","40.0%","50.0%","66.7%"],c:0,e:"(210 \u2212 140) \u00f7 210 = 33.3% margin. The same numbers are a 50% markup on cost \u2014 read which one is being asked."},
+{a:"A",t:"Units of measure",q:"One inch equals how many millimeters?",o:["2.54","10.0","25.4","39.4"],c:2,e:"25.4 mm per inch exactly. A quart is 0.946 L and a gallon is 3.785 L."},
+{a:"A",t:"General operations",q:"A shop account is billed at cost plus 25%. On a $64.00 cost item the shop pays:",o:["$76.80","$80.00","$85.33","$89.60"],c:1,e:"Markup is figured on cost: 64 \u00d7 1.25 = $80.00."},
+{a:"A",t:"General operations",q:"Which decimal equals 3/16 of an inch?",o:[".0625",".1875",".3125",".375"],c:1,e:"1/16 is .0625, so 3/16 is .1875. Worth memorizing the sixteenths for hose and fitting questions."},
+{a:"A",t:"Safety and hazmat",q:"A customer asks what is in a solvent they are buying. The parts specialist should:",o:["guess from the label","provide the SDS for that product","refuse to discuss it","tell them to call the manufacturer"],c:1,e:"The SDS has 16 standardized sections and must be available for every hazardous chemical you sell. Hand it over."},
+
+{a:"B",t:"Customer relations",q:"A specialist is on the phone when a second customer walks up to the counter. The specialist should:",o:["finish the call completely, then greet the walk-in","put the caller on hold and serve the walk-in first","acknowledge the walk-in, then finish with the caller","signal a coworker and keep going without acknowledging anyone"],c:2,e:"This is ASE's own published answer. Acknowledge the walk-in so they know they have been seen, then finish the call."},
+{a:"B",t:"Customer relations",q:"An angry customer returns a part that failed after two weeks. First, the specialist should:",o:["explain the warranty limits","listen completely without interrupting","ask for the receipt","offer store credit"],c:1,e:"Listening all the way through comes first on every ASE complaint item. Policy and paperwork come after the customer has been heard."},
+{a:"B",t:"Related sales",q:"A customer buying a water pump for a timing-belt engine should also be offered:",o:["a fuel filter","the timing belt, tensioner and coolant","spark plugs and wires","a serpentine belt only"],c:1,e:"The belt, tensioner, idlers and coolant all come out for that job anyway. Skipping them guarantees a comeback."},
+{a:"B",t:"Sales skills",q:"Specialist A says a feature is what a product is and a benefit is what it does for the customer. Specialist B says features sell better than benefits. Who is right?",o:["A only","B only","Both A and B","Neither A nor B"],c:0,e:"A's definition is correct. B has it backwards \u2014 benefits close sales, features support them."},
+{a:"B",t:"Customer relations",q:"A DIY customer with little experience is buying brake pads. The specialist should:",o:["assume they know the job and ring it up","ask questions to gauge skill level and mention the hardware, grease and cleaner needed","refuse and send them to a shop","sell the cheapest pads available"],c:1,e:"Identifying customer skill level is an explicit P2 task, and it catches the parts they will need mid-job."},
+{a:"B",t:"Sales skills",q:"A customer objects that ceramic pads cost more than semi-metallic. The best response is to:",o:["agree the semi-metallic set is a better buy","explain the lower dust, quieter operation and longer life for their driving","say the manufacturer sets the price","discount the ceramic pads immediately"],c:1,e:"Answer an objection with features and benefits tied to that customer's use. Instant discounting teaches customers to always push."},
+{a:"B",t:"Returns",q:"All of these are return types a specialist must distinguish between EXCEPT:",o:["core return","warranty return","customer satisfaction return","inventory turnover return"],c:3,e:"Turnover is an inventory metric, not a return category. The real ones are new, core, warranty, labor claim and customer satisfaction."},
+{a:"B",t:"Returns",q:"A customer is buying an electronic control module. The specialist should say that:",o:["it can be returned within 90 days for any reason","electronics are typically non-returnable once installed","electronics carry no warranty","it can be swapped for a different application later"],c:1,e:"Disclose the no-return-once-installed rule at the point of sale, not at the return counter."},
+{a:"B",t:"Phone skills",q:"When answering the phone, a parts specialist should:",o:["say only \"parts\" and wait","identify the store, identify themselves, and offer assistance","put the caller on hold immediately to check stock","ask for the account number before anything else"],c:1,e:"Store, name, offer of help. That is the listed phone etiquette task."},
+{a:"B",t:"Related sales",q:"A customer buying an oil filter mentions their wipers streak badly. The specialist should:",o:["ring up the filter only","recommend the correct blades and washer fluid","recommend a full brake inspection","send them to a service shop"],c:1,e:"The customer named a problem. Solving it is service, and related-item selling is a scored P2 skill."},
+{a:"B",t:"Phone skills",q:"A shop calls to check price and availability on six items. The specialist should:",o:["quote only what is in stock and skip the rest","check each item, quote availability, and confirm the order before hanging up","ask the shop to call back later","quote from memory to save time"],c:1,e:"Quoting from memory is how wrong parts end up on the delivery truck."},
+{a:"B",t:"Sales skills",q:"Specialist A says you should close by asking for the order. Specialist B says offering related items after the decision raises the average ticket. Who is right?",o:["A only","B only","Both A and B","Neither A nor B"],c:2,e:"Both are standard practice \u2014 ask for the order, then add related items once they have decided."},
+{a:"B",t:"Customer relations",q:"A customer insists the catalog part is wrong because it looks different from the old one. The specialist should:",o:["sell what they ask for without checking","verify VIN and production date and check footnotes for a mid-year change","insist the catalog is never wrong","refuse to look it up again"],c:1,e:"Mid-year design changes are real. Footnotes and build dates exist for exactly this situation."},
+{a:"B",t:"Customer relations",q:"The main reason to follow up when a special order arrives is to:",o:["meet a legal requirement","keep the customer informed, complete the sale and earn repeat business","avoid a restocking fee","free up counter space"],c:1,e:"Follow-up is what converts a one-time transaction into a repeat account."},
+{a:"B",t:"Customer relations",q:"All of these build a professional image EXCEPT:",o:["clean uniform and name tag","accurate product knowledge","discussing another customer's complaint with the person at the counter","a tidy, organized counter area"],c:2,e:"That breaches the other customer's privacy and makes the current one wonder what you say about them."},
+{a:"B",t:"Returns",q:"A customer returns a part claiming it failed, but it was clearly installed wrong and is damaged. The specialist should:",o:["refuse and end the conversation","stay calm, explain what the damage shows, and check store policy on options","give a full refund without inspecting","blame the customer's mechanic"],c:1,e:"Inspect, explain what you see, and work the policy. Handling it calmly keeps the customer even when the answer is no."},
+{a:"B",t:"Sales skills",q:"Premium and feature products should be presented:",o:["only when a customer asks for them","by explaining the benefit that matches how the customer uses the vehicle","by claiming the economy part will fail","only to wholesale accounts"],c:1,e:"Promoting premium products is a listed task, but it works by matching benefit to use, not by running down the other option."},
+{a:"B",t:"Customer relations",q:"An e-commerce order and an in-store customer arrive at the same time. The specialist should:",o:["ignore the online order until the store empties","balance both, acknowledging the in-store customer while processing the online request as required","cancel the online order","close the counter to process the order"],c:1,e:"Balancing phone, counter and e-commerce requests is explicitly on the task list."},
+{a:"B",t:"Sales skills",q:"The best way to learn what a customer actually needs is to:",o:["ask open questions about the vehicle and the symptom","sell what is on promotion","hand them the catalog","wait for them to name a part number"],c:0,e:"Obtaining accurate application information is task one for a reason. A wrong part sold fast is still a wrong part."},
+
+{a:"C",t:"Engine mechanical",q:"A failed timing belt on an interference engine will MOST likely cause:",o:["no damage, just a no-start","valve-to-piston contact and internal damage","a blown head gasket only","transmission damage"],c:1,e:"Interference means valves and pistons share the same space at different times. Lose timing and they meet."},
+{a:"C",t:"Engine mechanical",q:"Milky, tan oil on the dipstick MOST likely indicates:",o:["an overfilled crankcase","coolant in the crankcase, often a head gasket","wrong oil viscosity","a clogged oil filter"],c:1,e:"Coolant intrusion emulsifies the oil. White exhaust smoke and unexplained coolant loss go with it."},
+{a:"C",t:"Engine mechanical",q:"The correct related sale with a valve cover gasket set is:",o:["head bolts","RTV sealant where specified, oil and an oil filter","a timing chain","piston rings"],c:1,e:"RTV at the corners where the manufacturer calls for it, plus fresh oil and filter since the job usually accompanies a change."},
+{a:"C",t:"Engine mechanical",q:"The part that damps crankshaft vibration at the front of the engine is the:",o:["flexplate","harmonic balancer","pilot bearing","oil pump"],c:1,e:"The harmonic balancer (damper) absorbs torsional crank vibration and usually carries the accessory drive pulley."},
+{a:"C",t:"Engine mechanical",q:"Core plugs in an engine block are there to:",o:["seal casting sand holes left from manufacturing","adjust compression","hold the camshaft","regulate oil pressure"],c:0,e:"Often called freeze plugs, they seal the holes left when casting sand is removed. They leak when coolant corrodes them."},
+{a:"C",t:"Cooling",q:"An engine that never reaches operating temperature and has weak heat MOST likely has:",o:["a thermostat stuck open","a thermostat stuck closed","a failed water pump","a low-pressure radiator cap"],c:0,e:"Stuck open means coolant circulates constantly and the engine never warms. Stuck closed causes overheating instead."},
+{a:"C",t:"Cooling",q:"A 16 psi radiator cap raises the coolant boiling point by roughly:",o:["3\u00b0F","16\u00b0F","48\u00b0F","160\u00b0F"],c:2,e:"About 3\u00b0F per psi, so roughly 48\u00b0F. A wrong or weak cap causes overheating even with full coolant."},
+{a:"C",t:"Cooling",q:"Coolant concentrate should be mixed with:",o:["tap water","distilled water, normally 50/50","windshield washer fluid","nothing, use it full strength"],c:1,e:"Minerals in tap water cause scale and corrosion. Fifty-fifty with distilled water is the standard mix."},
+{a:"C",t:"Cooling",q:"A customer with an orange OAT coolant vehicle wants to top off with green IAT. The specialist should:",o:["sell the green coolant","explain that coolant types should not be mixed and supply the correct spec","recommend plain water","recommend transmission fluid"],c:1,e:"Match the manufacturer's specification rather than guessing by color. Mixing chemistries can gel and shorten service life."},
+{a:"C",t:"Fuel",q:"Specialist A says heater hose can replace a section of fuel line. Specialist B says any vacuum hose works on a fuel injection system. Who is right?",o:["A only","B only","Both A and B","Neither A nor B"],c:3,e:"Only fuel-rated hose goes on a fuel system, and injection systems need high-pressure-rated hose. This mirrors a real ASE sample item."},
+{a:"C",t:"Fuel",q:"The MOST common related sale with an in-tank electric fuel pump is:",o:["a fuel filter","a thermostat","an oxygen sensor","a PCV valve"],c:0,e:"A restricted filter is a common cause of pump failure. Leaving the old one in risks a repeat failure on your warranty."},
+{a:"C",t:"Fuel",q:"On a returnless fuel system, pressure is regulated:",o:["at the rail by a vacuum-referenced regulator","at or inside the fuel tank","by the throttle body","by the mass air flow sensor"],c:1,e:"Returnless designs regulate at the tank, so there is no rail-mounted regulator to look up."},
+{a:"C",t:"Fuel",q:"A gasoline direct injection (GDI) engine uses a high-pressure pump that is:",o:["driven mechanically off the camshaft","mounted in the tank only","electric and mounted on the firewall","part of the alternator"],c:0,e:"GDI uses a low-pressure in-tank pump feeding a cam-driven high-pressure pump at the rail."},
+{a:"C",t:"Ignition",q:"A customer with coil-on-plug ignition asks for a distributor rotor. The specialist should:",o:["sell the closest rotor available","explain that COP systems have no distributor, cap or rotor","order a rotor from the dealer","sell a coil pack without explaining"],c:1,e:"COP puts an individual coil on each plug. Correct the assumption and find what they actually need."},
+{a:"C",t:"Ignition",q:"A cold heat-range spark plug:",o:["sheds heat from the tip faster and resists pre-ignition","runs hotter to burn off deposits","raises idle output","is required in every turbo engine"],c:0,e:"Cold plugs transfer heat away quickly; hot plugs run hotter and resist fouling. Always match the vehicle spec."},
+{a:"C",t:"Ignition",q:"A customer servicing a distributorless waste-spark system could need any of these EXCEPT:",o:["spark plugs","a distributor cap","plug wires","a coil pack"],c:1,e:"Waste-spark systems use coil packs and wires but have no distributor, so no cap and no rotor exist."},
+{a:"C",t:"Ignition",q:"Most spark plugs and plug wires are resistor-type in order to:",o:["increase spark voltage","suppress radio frequency interference","reduce fuel consumption","allow a wider gap"],c:1,e:"The resistance suppresses RFI that would otherwise interfere with vehicle electronics and radio reception."},
+{a:"C",t:"Ignition",q:"Iridium and fine-wire platinum plugs generally should not be:",o:["installed with anti-seize where specified","aggressively re-gapped","torqued to specification","used in modern engines"],c:1,e:"The fine center electrode is easily damaged. Most come pre-gapped and need only a check, not bending."},
+{a:"C",t:"Exhaust",q:"A replacement catalytic converter for use in California must be:",o:["any universal converter","CARB compliant with an EO number","a straight pipe","an OE muffler assembly"],c:1,e:"California and the states that follow CARB require an Executive Order number. Federal converters are not legal there."},
+{a:"C",t:"Exhaust",q:"The correct related sales with a muffler replacement are:",o:["clamps, hangers and gaskets","spark plugs and wires","brake hardware","a fuel filter"],c:0,e:"Exhaust work destroys the old hardware almost every time."},
+{a:"C",t:"Exhaust",q:"The federal emissions warranty on a catalytic converter is generally:",o:["12 months / 12,000 miles","3 years / 36,000 miles","8 years / 80,000 miles","lifetime"],c:2,e:"Converters carry the longer federal emissions coverage, generally 8 years or 80,000 miles."},
+{a:"C",t:"Emissions",q:"Specialist A says heater hose is fine for a PCV connection. Specialist B says PCV hose is oil-resistant and heater hose is not. Who is right?",o:["A only","B only","Both A and B","Neither A nor B"],c:1,e:"PCV carries oil vapor. Heater hose swells and fails, which is exactly the trap ASE writes into this item."},
+{a:"C",t:"Emissions",q:"The primary purpose of EGR is to:",o:["increase power","lower combustion temperature and cut NOx","reduce oil consumption","recycle tank vapor"],c:1,e:"Recirculated exhaust dilutes the intake charge, lowering peak combustion temperature, which is what NOx formation depends on."},
+{a:"C",t:"Emissions",q:"A vehicle sets an EVAP code right after a fill-up. The MOST likely cause is:",o:["a failed oxygen sensor","a loose or faulty fuel cap","a worn timing belt","a clogged oil filter"],c:1,e:"The cap is the number one EVAP fault, and the timing right after fueling gives it away."},
+{a:"C",t:"Emissions",q:"The downstream oxygen sensor primarily:",o:["controls fuel trim","monitors catalytic converter efficiency","operates the EGR valve","regulates fuel pressure"],c:1,e:"Upstream sensors drive fuel trim. The downstream sensor exists to grade the converter."},
+{a:"C",t:"Emissions",q:"The charcoal canister in an EVAP system:",o:["filters engine oil","stores fuel tank vapor until it is purged into the engine","cools exhaust gas","traps coolant overflow"],c:1,e:"It adsorbs vapor, and the purge valve meters it into the intake for burning once the engine is ready."},
+{a:"C",t:"Manual transmission",q:"A standard clutch kit normally contains:",o:["disc, pressure plate and release bearing","flywheel and starter","disc only","master and slave cylinders"],c:0,e:"Pilot bearing, alignment tool and flywheel resurfacing are the related sales."},
+{a:"C",t:"Manual transmission",q:"A manufacturer specifies GL-4 gear oil for a manual transmission. Using GL-5 may:",o:["improve shifting in all cases","attack the yellow-metal synchronizers","raise fuel economy","have no possible effect"],c:1,e:"GL-5's high-sulfur EP additives can corrode brass and bronze synchros. Follow the specified GL rating exactly."},
+{a:"C",t:"Manual transmission",q:"The bearing that supports the transmission input shaft in the end of the crankshaft is the:",o:["release bearing","pilot bearing","throwout bearing","carrier bearing"],c:1,e:"The pilot bearing or bushing sits in the crank or flywheel and is a standard clutch-job related sale."},
+{a:"C",t:"Automatic transmission",q:"A CVT owner asks for conventional Dexron ATF. The specialist should:",o:["sell the Dexron","explain that CVTs need CVT-specific fluid and the wrong fluid can destroy the unit","recommend Type F","recommend gear oil"],c:1,e:"CVT fluid is not interchangeable with conventional ATF. This is an expensive mistake that lands back on the store."},
+{a:"C",t:"Automatic transmission",q:"The component that couples the engine to an automatic transmission and multiplies torque is the:",o:["clutch disc","torque converter","pressure plate","pilot bearing"],c:1,e:"The torque converter is a fluid coupling that also multiplies torque at low speeds."},
+{a:"C",t:"Automatic transmission",q:"A standard automatic transmission service sale includes:",o:["filter, pan gasket and the correct ATF","a clutch kit","a timing belt","a water pump"],c:0,e:"Filter and pan gasket kit plus the specified fluid, with cooler line fittings and RTV where called for."},
+{a:"C",t:"Drive train",q:"The MOST common reason a CV axle is replaced is:",o:["a torn boot letting grease out and dirt in","a bent driveshaft","worn brake pads","a leaking transmission pan"],c:0,e:"Boot fails, grease slings, contamination enters, the joint clicks in turns. Caught early, a boot kit saves the axle."},
+{a:"C",t:"Drive train",q:"A limited-slip differential chatters in turns after service. The MOST likely omission was:",o:["friction modifier additive","a new pinion seal","the cover gasket","wheel bearing grease"],c:0,e:"Limited-slip clutches need friction modifier. Some gear oils include it, many do not \u2014 check before you sell."},
+{a:"C",t:"Drive train",q:"Universal joints are sized primarily by:",o:["cap diameter and snap ring style","driveshaft length","vehicle weight","axle ratio"],c:0,e:"Cap diameter, overall width and retention style determine the U-joint, not the shaft it goes in."},
+{a:"C",t:"Brakes",q:"Specialist A says DOT 3 brake fluid absorbs moisture from the air. Specialist B says DOT 5 silicone fluid may be freely mixed with DOT 3. Who is right?",o:["A only","B only","Both A and B","Neither A nor B"],c:0,e:"DOT 3 and 4 are hygroscopic glycol fluids. DOT 5 is silicone and must never be mixed with them."},
+{a:"C",t:"Brakes",q:"All of these are appropriate related sales on a front brake job EXCEPT:",o:["a hardware kit","caliper slide pin grease","brake cleaner","a fuel pressure regulator"],c:3,e:"The regulator has nothing to do with brakes. The other three ride along on nearly every brake ticket."},
+{a:"C",t:"Brakes",q:"When replacing a section of steel brake line, supply:",o:["a compression union","line and fittings matching the original flare type","copper tubing and hose clamps","fuel line and clamps"],c:1,e:"Match double/SAE or ISO/bubble flare. Compression fittings can separate under brake pressure and are never acceptable."},
+{a:"C",t:"Brakes",q:"Compared with semi-metallic pads, ceramic pads generally:",o:["produce less dust and less noise","handle more heat in heavy towing","cost less","wear rotors faster"],c:0,e:"Ceramic is the quiet, low-dust daily-driver upsell. Semi-metallic still wins for heat and heavy loads."},
+{a:"C",t:"Brakes",q:"DOT 4 brake fluid compared with DOT 3 has:",o:["a lower boiling point","a higher boiling point","a silicone base","no moisture absorption"],c:1,e:"DOT 4 boils higher than DOT 3 and both are glycol-based. DOT 5.1 is also glycol despite the number."},
+{a:"C",t:"Brakes",q:"Brake pads should be sold:",o:["individually, one per wheel","in axle sets","only in complete four-wheel sets","by weight"],c:1,e:"Friction is replaced across an axle so braking stays even side to side."},
+{a:"C",t:"Suspension and steering",q:"A customer replacing front struts should also be told they need:",o:["a wheel alignment","a fuel filter","a coolant flush","new spark plugs"],c:0,e:"Anything that changes suspension geometry requires an alignment. Strut mounts and bearing plates are the other related sale."},
+{a:"C",t:"Wheels",q:"A wheel specification of 5 \u00d7 114.3 refers to the:",o:["diameter and width","number of lugs and the bolt circle diameter in mm","offset and backspacing","tire size"],c:1,e:"Five lugs on a 114.3 mm bolt circle. Offset and center bore still have to match too."},
+{a:"C",t:"Suspension and steering",q:"Rapid feathered wear across both front tires MOST likely indicates incorrect:",o:["toe","caster","tire pressure only","wheel offset"],c:0,e:"Toe error scrubs the tire sideways as it rolls, which feathers the tread fast."},
+{a:"C",t:"Wheels",q:"Wheel offset describes the distance from the:",o:["mounting face to the wheel centerline","bead to the bead","hub bore to the lug holes","tread to the fender"],c:0,e:"Positive offset pulls the wheel inboard, negative pushes it out. Wrong offset causes rubbing and bearing load."},
+{a:"C",t:"Wheels",q:"Lug nuts must be matched to the wheel's:",o:["seat type \u2014 conical, ball or flat with washer","color","brand","weight"],c:0,e:"A mismatched seat cannot clamp properly and the wheel can loosen. Torque in a star pattern to spec."},
+{a:"C",t:"Suspension and steering",q:"On a parallelogram steering system, the part that mirrors the pitman arm on the opposite side is the:",o:["idler arm","tie rod end","sway bar link","ball joint"],c:0,e:"The idler arm supports the far end of the center link. It is a common wear item sold alongside tie rod ends."},
+{a:"C",t:"HVAC",q:"A system that uses an orifice tube uses which filter-drier component?",o:["a receiver-drier on the high side","an accumulator on the low side","none","an expansion valve"],c:1,e:"Orifice tube systems use a low-side accumulator; expansion valve systems use a high-side receiver-drier."},
+{a:"C",t:"HVAC",q:"Specialist A says the drier is replaced whenever the system is opened. Specialist B says PAG oil is correct for a hybrid's electric compressor. Who is right?",o:["A only","B only","Both A and B","Neither A nor B"],c:0,e:"The desiccant saturates once opened, so A is right. Hybrid and EV electric compressors require non-conductive POE oil, never PAG."},
+{a:"C",t:"HVAC",q:"All of these should be sold with a replacement A/C compressor EXCEPT:",o:["a new accumulator or receiver-drier","an orifice tube or expansion valve","refrigerant oil","a thermostat"],c:3,e:"A thermostat is a cooling system part. The drier, metering device, oil and a flush are the required A/C related sales."},
+{a:"C",t:"HVAC",q:"R-1234yf and R-134a service fittings are different in order to:",o:["prevent cross-contamination of refrigerants","reduce cost","simplify manufacturing","allow mixing"],c:0,e:"Unique fittings for each refrigerant prevent charging a system with the wrong one."},
+{a:"C",t:"HVAC",q:"A customer complains of weak airflow from the vents with the blower on high. Check first:",o:["the cabin air filter","the radiator cap","the PCV valve","the fuel filter"],c:0,e:"A clogged cabin filter is the cheapest and most common cause, and it is an easy related sale year-round."},
+{a:"C",t:"Electrical",q:"A 15-amp circuit keeps blowing fuses and the customer wants a 25-amp fuse. The specialist should:",o:["sell the 25-amp fuse","explain that the fuse protects the wiring and a larger one risks a fire, and recommend diagnosis","sell any circuit breaker","sell a fusible link instead"],c:1,e:"Oversizing the fuse makes the wire the fuse. Explain why rather than just refusing."},
+{a:"C",t:"Electrical",q:"Compared with an 18-gauge wire, a 10-gauge wire is:",o:["smaller","larger","identical","rated for less current"],c:1,e:"AWG runs backwards \u2014 a smaller number is a bigger wire carrying more current."},
+{a:"C",t:"Electrical",q:"An 1157 bulb differs from an 1156 in that the 1157:",o:["has two filaments","has a wedge base","is a halogen capsule","draws less current"],c:0,e:"The 1157 is dual-filament for combined park and brake or turn duty; the 1156 is single-filament."},
+{a:"C",t:"Electrical",q:"A halogen headlamp capsule should not be touched on the glass because:",o:["it shatters instantly","skin oil creates a hot spot that shortens bulb life","it voids the vehicle warranty","the glass is coated with refrigerant"],c:1,e:"Handle it by the base or with a clean cloth."},
+{a:"C",t:"Electrical",q:"A relay is used in a circuit to:",o:["let a small control current switch a much larger load current","reduce system voltage","store electrical charge","replace a ground"],c:0,e:"That is why headlights, fuel pumps and blowers use relays instead of running full current through a dash switch."},
+{a:"C",t:"Battery and charging",q:"Cold cranking amps (CCA) is measured at:",o:["0\u00b0F for 30 seconds holding at least 7.2 volts","32\u00b0F for 30 seconds","80\u00b0F for 15 seconds","0\u00b0F for 15 minutes"],c:0,e:"CA/MCA is rated at 32\u00b0F and always yields a bigger, less useful number."},
+{a:"C",t:"Battery and charging",q:"Reserve capacity is expressed in:",o:["amps","minutes","volts","cold cranking amps"],c:1,e:"Minutes a battery can carry a 25-amp load before dropping to 10.5 volts."},
+{a:"C",t:"Battery and charging",q:"Battery group size primarily describes:",o:["cranking power","case dimensions, terminal type and terminal location","warranty length","reserve capacity"],c:1,e:"Group size is purely physical, which is why you check group and CCA separately."},
+{a:"C",t:"Battery and charging",q:"A 12-volt battery reading 12.2 volts open-circuit is roughly:",o:["fully charged","75% charged","50% charged","fully discharged"],c:2,e:"Roughly: 12.6 full, 12.4 at 75%, 12.2 at 50%, 12.0 at 25%."},
+{a:"C",t:"Battery and charging",q:"Before load testing a battery, the specialist should:",o:["test immediately regardless of charge","charge it first if it is low","open the caps and add acid","jump start the vehicle"],c:1,e:"Load testing a discharged battery produces a false failure."},
+{a:"C",t:"Battery and charging",q:"A vehicle originally built with AGM and start-stop should get:",o:["any flooded battery of the same group","an AGM battery meeting or exceeding the OE spec","a deep-cycle marine battery","a smaller group to save money"],c:1,e:"Start-stop cycles the battery hard and the charging strategy assumes AGM. A flooded replacement fails early."},
+{a:"C",t:"Battery and charging",q:"Normal charging system output at idle is about:",o:["10.5 to 11.5 volts","12.0 to 12.6 volts","13.5 to 14.5 volts","16.0 to 18.0 volts"],c:2,e:"Below that suggests a charging fault; well above it means a regulator problem that will cook the battery."},
+{a:"C",t:"Battery and charging",q:"When looking up a starter, the specifications that matter include:",o:["rotation, tooth count and mounting","paint color","battery group size","tire size"],c:0,e:"Rotation, tooth count, voltage and mounting pattern define the starter, and most are core exchange items."},
+{a:"C",t:"Battery and charging",q:"Specific gravity of a fully charged lead-acid cell is about:",o:["1.065","1.165","1.265","1.365"],c:2,e:"About 1.265 at full charge, dropping as the battery discharges."},
+{a:"C",t:"Fasteners",q:"Six radial lines on a bolt head indicate a:",o:["grade 2","grade 5","grade 8","metric class 8.8"],c:2,e:"Expect an illustration of a bolt head on the real test. Six lines is grade 8."},
+{a:"C",t:"Belts and hose",q:"A serpentine belt numbered 6K885 indicates:",o:["6 ribs and 88.5 inches effective length","6 inches wide, 885 mm long","a 6-cylinder application","a 6-year warranty"],c:0,e:"Rib count and length both have to match. Worn serpentine belts are judged by rib material loss with a wear gauge."},
+{a:"C",t:"Belts and hose",q:"Automotive hose is sized by its:",o:["outside diameter","inside diameter","wall thickness","burst pressure only"],c:1,e:"Always ID, and the fluid it carries determines which type of hose it must be."},
+{a:"C",t:"Fittings",q:"NPT fittings seal:",o:["on the flare","on the tapered threads, usually with sealant","with an O-ring only","by compression on a ferrule"],c:1,e:"Tapered pipe thread seals on the threads. Flare fittings seal on the flare and must never get sealant on the seat."},
+{a:"C",t:"Belts and hose",q:"All of these are correct hose applications EXCEPT:",o:["heater hose on a coolant bypass line","fuel injection hose on a high-pressure fuel line","vacuum hose on a power steering return line","transmission cooler hose on ATF lines"],c:2,e:"Power steering is high pressure and needs PS-rated hose. Vacuum hose would rupture immediately."},
+{a:"C",t:"Body and refinish",q:"Paint and body supplies should be rotated:",o:["every six months","when new stock arrives","only at physical inventory","once a year"],c:1,e:"This matches ASE's own sample question. New goes behind old because these chemicals have a shelf life."},
+{a:"C",t:"Body and refinish",q:"The item that must accompany a can of body filler is:",o:["cream hardener","brake cleaner","engine oil","gear lube"],c:0,e:"Filler will not cure without it. Sandpaper, a mixing board and spreaders are the next related items."},
+{a:"C",t:"Fasteners",q:"A metric bolt marked 10.9 compared with one marked 8.8 is:",o:["weaker","stronger","the same strength, different length","left-hand threaded"],c:1,e:"Metric property class rises with tensile strength: 8.8, then 10.9, then 12.9."},
+{a:"C",t:"Fasteners",q:"When a customer cannot tell if a fastener is SAE or metric, the specialist should:",o:["thread it in by hand and see","measure it with a thread pitch gauge and caliper","sell whatever is in stock","assume metric on any import"],c:1,e:"Measuring takes ten seconds. Starting a mismatched fastener can ruin the threads in the part."},
+{a:"C",t:"Accessories",q:"A customer wants a wiper blade for a vehicle with a beam-style OE blade. The specialist should:",o:["sell a conventional bracket blade of any length","supply the correct length and the right connector type for that arm","sell two of the same length for both sides","recommend no replacement"],c:1,e:"Driver and passenger blades are often different lengths, and the arm connector varies. Both have to match."},
+{a:"C",t:"Engine mechanical",q:"An API service rating on a bottle of engine oil tells the customer:",o:["the viscosity grade","the performance standard the oil meets","the quart size","the brand tier"],c:1,e:"SAE numbers give viscosity; the API donut gives the service category, currently SP for gasoline engines with ILSAC GF-6."},
+{a:"C",t:"Brakes",q:"Wheel speed sensors are part of which system?",o:["EVAP","ABS","EGR","PCV"],c:1,e:"ABS uses wheel speed sensors at the hubs to detect lockup and modulate pressure."},
+
+{a:"D",t:"Vehicle identification",q:"A standard automotive VIN contains how many characters?",o:["11","13","17","20"],c:2,e:"Seventeen, standardized since 1981."},
+{a:"D",t:"Vehicle identification",q:"Which VIN position identifies the model year?",o:["1","8","9","10"],c:3,e:"Position 9 is the check digit, 10 is the model year, 11 is the plant, and 12\u201317 are the serial."},
+{a:"D",t:"Vehicle identification",q:"Which letter is never used as a VIN model-year code?",o:["A","F","O","P"],c:2,e:"I, O, Q, U and Z and the digit 0 are excluded because they are easily confused with other characters."},
+{a:"D",t:"Vehicle identification",q:"A catalog listing splits by production date. Find the build date on the:",o:["windshield VIN plate","driver's door jamb certification label","radiator support","spare tire cover"],c:1,e:"The door jamb label carries month and year of production plus GVWR and tire and wheel specs."},
+{a:"D",t:"Vehicle identification",q:"A paint code for a refinish sale is MOST commonly found on the:",o:["service parts identification label","oil filler cap","master cylinder reservoir","exhaust manifold"],c:0,e:"Glove box, trunk or door jamb depending on manufacturer. It carries paint and option codes."},
+{a:"D",t:"Vehicle identification",q:"Which VIN position is the check digit used to validate the number?",o:["4","8","9","11"],c:2,e:"Position 9 is calculated from the other characters, so a mistyped VIN usually fails validation there."},
+{a:"D",t:"Vehicle identification",q:"GM build options are identified by:",o:["RPO codes","DOT numbers","API ratings","SAE grades"],c:0,e:"Regular Production Option codes appear on the service parts identification label and resolve trim and equipment questions."},
+
+{a:"E",t:"Catalog skills",q:"The single most common reason a specialist supplies the wrong part is:",o:["the catalog was out of date","the footnote qualifying the application was not read","the customer lied","the box was mislabeled"],c:1,e:"Footnotes carry the qualifiers that split an application \u2014 build date, heavy duty cooling, 4WD only."},
+{a:"E",t:"Catalog skills",q:"An interchange lookup is used to:",o:["find the part for a year, make and model","find an equivalent number from another brand or the OE number","calculate turnover","price a special order"],c:1,e:"Application goes vehicle-to-part; interchange goes part-to-part."},
+{a:"E",t:"Catalog skills",q:"Specialist A says supplements and bulletins update the base catalog between editions. Specialist B says a printed catalog never needs updating. Who is right?",o:["A only","B only","Both A and B","Neither A nor B"],c:0,e:"A printed catalog is only current through its latest supplement."},
+{a:"E",t:"Catalog skills",q:"All of these narrow a catalog lookup EXCEPT:",o:["engine size and VIN engine code","production date","drivetrain configuration","the customer's payment method"],c:3,e:"Payment method is a transaction detail, not an application detail."},
+{a:"E",t:"Catalog skills",q:"After exhausting the catalog and interchange, the next resource is:",o:["a guess based on the closest listing","the supplier's tech support line or the OE dealer","a general internet forum","selling nothing"],c:1,e:"The phone call costs less than the wrong part, the return, and the lost customer."},
+{a:"E",t:"Catalog skills",q:"A part number suffix MOST commonly indicates:",o:["the customer account","side, revision or selling quantity","store cost","shipping weight"],c:1,e:"Left versus right, revision level, or pack quantity are the usual meanings."},
+{a:"E",t:"Catalog skills",q:"A specialist finds a listing error in the electronic catalog. They should:",o:["ignore it","report it to the supplier or catalog provider for correction","delete it locally and say nothing","stop using the catalog"],c:1,e:"Catalog maintenance and error reporting is an explicit P2 task and prevents the next store repeating the mistake."},
+{a:"E",t:"Catalog skills",q:"With two engine options in the same model year, the deciding information is the:",o:["tire size","VIN engine code and production date","paint code","wheel offset"],c:1,e:"Usually the eighth VIN character, confirmed against the build date."},
+{a:"E",t:"Catalog skills",q:"A catalog illustration is MOST useful for:",o:["confirming shape, connector and mounting before the part leaves the counter","determining price","calculating margin","checking the warranty"],c:0,e:"Comparing the picture against the old part catches the wrong-variant sale before the customer drives away."},
+{a:"E",t:"Catalog skills",q:"The minimum information needed to begin most catalog lookups is:",o:["year, make, model, engine and sub-model","the customer's name","the old part's brand only","the VIN alone"],c:0,e:"Start there, then narrow with VIN, build date, drivetrain and options."},
+
+{a:"F",t:"Inventory management",q:"Inventory turnover is calculated as:",o:["cost of goods sold \u00f7 average inventory","gross sales \u00f7 employees","list price \u00f7 cost","returns \u00f7 sales"],c:0,e:"Higher turns mean the same inventory dollars are working harder."},
+{a:"F",t:"Inventory management",q:"The main reason to record a lost sale is to:",o:["discipline the employee","adjust stocking to real customer demand","satisfy a tax auditor","calculate margin"],c:1,e:"Unrecorded lost sales guarantee the store keeps missing the same demand."},
+{a:"F",t:"Inventory management",q:"Proper stock rotation means:",o:["newest stock in front for easy access","new stock behind existing stock so older sells first","alphabetizing monthly","rotating only at inventory time"],c:1,e:"First in, first out. It matters most for anything with a shelf life."},
+{a:"F",t:"Inventory management",q:"A core may be refused for any of these reasons EXCEPT:",o:["it is cracked or unrebuildable","it is a different part than the one sold","major components are missing","it is dirty but complete and intact"],c:3,e:"Dirty is normal. Cores are refused for being wrong, incomplete or unrebuildable."},
+{a:"F",t:"Inventory management",q:"The main reason for a physical inventory is to:",o:["rearrange the back room","verify system counts against actual stock and find discrepancies","raise the markup","reduce special orders"],c:1,e:"It surfaces shrinkage, receiving errors and misplaced stock."},
+{a:"F",t:"Inventory management",q:"When a part is taken off the shelf for store use, it should be:",o:["written off the inventory through the proper process","ignored, since no customer paid","counted as a lost sale","returned to the vendor"],c:0,e:"Store-use items still have to leave the system correctly or the counts drift."},
+{a:"F",t:"Inventory management",q:"Incoming freight should be verified against the:",o:["packing list and purchase order, noting shortages and damage","customer invoice","catalog illustration","sales flyer"],c:0,e:"Discrepancies have to be reported at receiving, not discovered weeks later at inventory."},
+
+{a:"G",t:"Merchandising",q:"Impulse items are MOST effectively displayed:",o:["in the back stock room","at the counter and checkout","behind the counter out of reach","only in the delivery van"],c:1,e:"Impulse purchases happen where the customer already has a wallet out."},
+{a:"G",t:"Merchandising",q:"Seasonal merchandise such as wipers and antifreeze should be displayed:",o:["year-round in the same quantity","on end caps and high-traffic areas ahead of the season","only on request","in the back until winter arrives"],c:1,e:"Get it out in front of demand, not after it."},
+{a:"G",t:"Merchandising",q:"All of these are sound display practices EXCEPT:",o:["clearly pricing every displayed item","keeping shelves faced and fully stocked","leaving faded, damaged packaging out to clear it","cross-merchandising related items beside the primary part"],c:2,e:"Damaged packaging reads as old stock and drags down the whole display."},
+{a:"G",t:"Merchandising",q:"A planogram specifies:",o:["where products are placed on the shelf and in what quantity","employee schedules","delivery routes","warranty terms"],c:0,e:"It sets placement and facings, with eye level reserved for the products the store most wants to move."},
+{a:"G",t:"Merchandising",q:"An empty gap on a shelf is a problem because:",o:["it reads as out of stock even when stock exists in back","it violates federal law","it changes the part number","it voids the warranty"],c:0,e:"Customers do not ask, they leave. Facing and fronting shelves is part of the job."}
+];
+const AREA={A:{n:"General operations",w:13},B:{n:"Customer relations & sales",w:15},C:{n:"Vehicle systems",w:53},D:{n:"Vehicle identification",w:4},E:{n:"Catalog & information",w:8},F:{n:"Inventory management",w:4},G:{n:"Merchandising",w:3}};
+const ORDER=["A","B","C","D","E","F","G"], KEY="asep2:progress", LTR=["A","B","C","D"];
+const app=document.getElementById("app");
+let S=null, run=null, timer=null;
+
+function fresh(){const a={};ORDER.forEach(k=>a[k]={c:0,n:0});return{v:1,streak:0,last:null,days:[],area:a,seen:{},missed:[],bestExam:null};}
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function dayBefore(s,n){const d=new Date(s+"T12:00:00");d.setDate(d.getDate()-n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));}
+
+const STORE={
+  async get(k){
+    if(window.storage&&window.storage.get){const r=await window.storage.get(k);return r?r.value:null;}
+    try{return window.localStorage.getItem(k);}catch(e){return null;}
+  },
+  async set(k,v){
+    if(window.storage&&window.storage.set){await window.storage.set(k,v);return;}
+    try{window.localStorage.setItem(k,v);}catch(e){}
+  }
+};
+async function load(){
+  try{const r=await STORE.get(KEY);S=r?JSON.parse(r):fresh();}
+  catch(e){S=fresh();}
+  if(!S||!S.v){S=fresh();}
+  ORDER.forEach(k=>{if(!S.area[k])S.area[k]={c:0,n:0};});
+  S.seen=S.seen||{}; S.missed=S.missed||[]; S.days=S.days||[];
+}
+async function save(){try{await STORE.set(KEY,JSON.stringify(S));}catch(e){}}
+
+function acc(k){const a=S.area[k];return a.n?Math.round(a.c/a.n*100):null;}
+function totals(){let c=0,n=0;ORDER.forEach(k=>{c+=S.area[k].c;n+=S.area[k].n;});return{c,n};}
+
+/* ---------- picking ---------- */
+function pick(n,pool){
+  const byArea={};ORDER.forEach(k=>byArea[k]=[]);
+  pool.forEach(i=>byArea[Q[i].a].push(i));
+  const quota={},tot=ORDER.reduce((s,k)=>s+AREA[k].w,0);
+  let assigned=0;
+  ORDER.forEach(k=>{const q=Math.min(byArea[k].length,Math.floor(n*AREA[k].w/tot));quota[k]=q;assigned+=q;});
+  const rank=ORDER.slice().sort((a,b)=>AREA[b].w-AREA[a].w);
+  let i=0;while(assigned<n&&i<400){const k=rank[i%rank.length];if(quota[k]<byArea[k].length){quota[k]++;assigned++;}i++;}
+  const out=[];
+  ORDER.forEach(k=>{
+    const list=byArea[k].slice().sort((x,y)=>score(x)-score(y));
+    out.push(...list.slice(0,quota[k]));
+  });
+  for(let j=out.length-1;j>0;j--){const r=Math.floor(Math.random()*(j+1));[out[j],out[r]]=[out[r],out[j]];}
+  return out;
+}
+function score(i){return (S.missed.includes(i)?-8:0)+(S.seen[i]||0)+Math.random();}
+
+/* ---------- screens ---------- */
+function home(){
+  const t=totals(), overall=t.n?Math.round(t.c/t.n*100):null;
+  const weak=ORDER.filter(k=>S.area[k].n>=4).sort((a,b)=>acc(a)-acc(b))[0];
+  const week=[];for(let i=6;i>=0;i--)week.push(dayBefore(today(),i));
+  const bars=ORDER.map(k=>{
+    const a=acc(k), w=AREA[k].w, pctW=Math.max(8,Math.round(w/53*100));
+    return `<div class="bp-row">
+      <div class="bp-name">${esc(AREA[k].n)}</div>
+      <div class="bp-track-wrap"><div class="bp-track" style="width:${pctW}%">
+        <div class="bp-fill${a===null?" thin":""}" style="width:${a===null?0:a}%"></div></div></div>
+      <div class="bp-pct">${a===null?"\u2014":a+"%"}</div></div>`;}).join("");
+
+  app.innerHTML=`
+    <h1>ASE P2 daily drill</h1>
+    <p class="sub">Automobile Parts Specialist \u00b7 ${Q.length} questions in the bank</p>
+
+    <div class="panel">
+      <div class="streak"><b>${S.streak}</b><span>day${S.streak===1?"":"s"} in a row${S.last===today()?" \u00b7 today is done":""}</span></div>
+      <div class="week">${week.map(d=>`<div class="dot${S.days.includes(d)?" on":""}"></div>`).join("")}</div>
+    </div>
+
+    <div class="panel">
+      <h2>Your accuracy against the real blueprint</h2>
+      ${bars}
+      <p class="bp-note">Bar width is that area's share of the scored test. Vehicle systems is 53% of your grade${overall!==null?`, and you are at ${overall}% overall across ${t.n} answered`:""}.${weak&&acc(weak)<75?` Weakest right now: ${esc(AREA[weak].n.toLowerCase())}.`:""}</p>
+    </div>
+
+    <button class="btn" onclick="start('daily')">Daily 20<small>Weighted like the real test. Missed questions come back first.</small></button>
+    <button class="btn ghost" onclick="start('area')">Drill one area<small>Pick a weak spot and hammer it</small></button>
+    <button class="btn ghost" ${S.missed.length<4?"disabled":""} onclick="start('miss')">Review misses<small>${S.missed.length} question${S.missed.length===1?"":"s"} waiting${S.missed.length<4?" \u00b7 need at least 4":""}</small></button>
+    <button class="btn ghost" onclick="start('exam')">Full mock exam<small>75 questions, 90 minutes${S.bestExam!==null?" \u00b7 best "+S.bestExam+"%":""}</small></button>
+    <p class="tiny">Progress saves automatically on this device.</p>`;
+}
+
+function areaPicker(){
+  app.innerHTML=`<h1>Drill one area</h1><p class="sub">15 questions from a single content area</p>`+
+  ORDER.map(k=>{const a=acc(k);return `<button class="btn ghost" onclick="start('area','${k}')">${esc(AREA[k].n)}<small>${AREA[k].w}% of the test${a===null?"":" \u00b7 you're at "+a+"%"}</small></button>`;}).join("")+
+  `<button class="btn ghost" onclick="home()">Back</button>`;
+}
+
+function start(mode,areaKey){
+  if(mode==="area"&&!areaKey){areaPicker();return;}
+  let ids, secs=null;
+  if(mode==="miss"){ids=S.missed.slice();for(let j=ids.length-1;j>0;j--){const r=Math.floor(Math.random()*(j+1));[ids[j],ids[r]]=[ids[r],ids[j]];}ids=ids.slice(0,20);}
+  else if(mode==="area"){const pool=Q.map((q,i)=>i).filter(i=>Q[i].a===areaKey);ids=pool.sort((x,y)=>score(x)-score(y)).slice(0,15);}
+  else if(mode==="exam"){ids=pick(75,Q.map((q,i)=>i));secs=90*60;}
+  else{ids=pick(20,Q.map((q,i)=>i));}
+  run={mode,ids,i:0,right:0,wrong:[],answered:false,area:areaKey,secs,exam:mode==="exam"};
+  if(secs){timer=setInterval(tick,1000);}
+  question();
+}
+function tick(){
+  if(!run||run.secs===null)return;
+  run.secs--;
+  const el=document.getElementById("clock");
+  if(el){el.textContent=fmt(run.secs);el.className="clock"+(run.secs<300?" low":"");}
+  if(run.secs<=0){clearInterval(timer);timer=null;finish();}
+}
+function fmt(s){const m=Math.floor(s/60);return m+":"+String(s%60).padStart(2,"0");}
+
+function question(){
+  const q=Q[run.ids[run.i]];
+  app.innerHTML=`
+    <div class="bar"><i style="width:${run.i/run.ids.length*100}%"></i></div>
+    <div class="meta"><span>${run.i+1} of ${run.ids.length} \u00b7 ${esc(q.t)}</span>
+    <span>${run.exam?`<span id="clock" class="clock">${fmt(run.secs)}</span>`:`${run.right} right`}</span></div>
+    <p class="qtext">${esc(q.q)}</p>
+    <div id="opts">${q.o.map((o,j)=>`<button class="opt" onclick="answer(${j})"><span class="ltr">${LTR[j]}</span>${esc(o)}</button>`).join("")}</div>
+    <div id="fb"></div>`;
+  window.scrollTo(0,0);
+}
+
+function answer(j){
+  if(run.answered)return; run.answered=true;
+  const idx=run.ids[run.i], q=Q[idx], ok=j===q.c;
+  S.seen[idx]=(S.seen[idx]||0)+1;
+  S.area[q.a].n++; if(ok)S.area[q.a].c++;
+  if(ok){run.right++; const m=S.missed.indexOf(idx); if(m>-1)S.missed.splice(m,1);}
+  else{run.wrong.push(idx); if(!S.missed.includes(idx))S.missed.push(idx);}
+  const btns=document.querySelectorAll("#opts .opt");
+  btns.forEach((b,k)=>{b.disabled=true;if(k===q.c)b.classList.add("correct");else if(k===j)b.classList.add("wrong");});
+  document.getElementById("fb").innerHTML=
+    `<div class="fb ${ok?"ok":"no"}"><b>${ok?"Correct":"Correct answer: "+LTR[q.c]}</b>${esc(q.e)}</div>
+     <button class="btn" onclick="next()">${run.i+1===run.ids.length?"See results":"Next question"}</button>`;
+  save();
+}
+function next(){run.i++;run.answered=false;if(run.i>=run.ids.length){finish();}else{question();}}
+
+async function finish(){
+  if(timer){clearInterval(timer);timer=null;}
+  const n=run.i+(run.answered?1:0)||run.ids.length, pct=Math.round(run.right/run.ids.length*100);
+  if(run.mode==="daily"||run.mode==="exam"){
+    const d=today();
+    if(S.last!==d){
+      S.streak=(S.last===dayBefore(d,1))?S.streak+1:1;
+      S.last=d; S.days.push(d); S.days=S.days.slice(-30);
+    }
+  }
+  if(run.exam&&(S.bestExam===null||pct>S.bestExam))S.bestExam=pct;
+  await save();
+  const verdict = pct>=85?"Ready. Keep this up and go sit the test."
+    : pct>=70?"Passing range, but thin. Re-read the areas you missed more than once."
+    : "Not there yet. Go back to the review notes before you book a date.";
+  const byArea={};run.ids.forEach((id,k)=>{const a=Q[id].a;byArea[a]=byArea[a]||{c:0,n:0};byArea[a].n++;if(!run.wrong.includes(id))byArea[a].c++;});
+  app.innerHTML=`
+    <h1>${run.exam?"Mock exam":"Session"} results</h1>
+    <div class="panel">
+      <div class="score">${pct}%<span> \u00b7 ${run.right} of ${run.ids.length}</span></div>
+      <p class="verdict">${verdict}</p>
+    </div>
+    <div class="panel"><h2>By content area</h2>
+      ${Object.keys(byArea).sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b)).map(k=>
+        `<div class="bp-row"><div class="bp-name">${esc(AREA[k].n)}</div>
+         <div class="bp-track-wrap"><div class="bp-track"><div class="bp-fill" style="width:${Math.round(byArea[k].c/byArea[k].n*100)}%"></div></div></div>
+         <div class="bp-pct">${byArea[k].c}/${byArea[k].n}</div></div>`).join("")}
+    </div>
+    ${run.wrong.length?`<div class="panel"><h2>Worth re-reading</h2>
+      ${run.wrong.map(id=>`<div class="miss"><em>${esc(AREA[Q[id].a].n)} \u00b7 ${esc(Q[id].t)}</em>${esc(Q[id].q)}<br><b>${LTR[Q[id].c]}.</b> ${esc(Q[id].o[Q[id].c])}</div>`).join("")}
+      </div>`:""}
+    <button class="btn" onclick="home()">Done</button>
+    ${run.wrong.length>=4?`<button class="btn ghost" onclick="start('miss')">Retry the ones you missed</button>`:""}`;
+  window.scrollTo(0,0);
+}
+
+load().then(home).catch(()=>{S=fresh();home();});
+</script>
+
+</body>
+</html>
