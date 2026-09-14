@@ -54,6 +54,7 @@
   .btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
   .btn.ghost small{opacity:1;color:var(--muted)}
   .btn[disabled]{opacity:.45;cursor:default}
+  .btn.link{text-decoration:none;font-family:inherit;line-height:1.5}
   .btn:focus-visible,.opt:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 
   /* quiz */
@@ -322,6 +323,7 @@ function home(){
     <button class="btn ghost" onclick="start('area')">Drill one area<small>Pick a weak spot and hammer it</small></button>
     <button class="btn ghost" ${S.missed.length<4?"disabled":""} onclick="start('miss')">Review misses<small>${S.missed.length} question${S.missed.length===1?"":"s"} waiting${S.missed.length<4?" \u00b7 need at least 4":""}</small></button>
     <button class="btn ghost" onclick="start('exam')">Full mock exam<small>75 questions, 90 minutes${S.bestExam!==null?" \u00b7 best "+S.bestExam+"%":""}</small></button>
+    <a class="btn ghost link" href="study-guide.html">Study guide<small>Blueprint, content review, and a 102-question practice exam</small></a>
     <p class="tiny">Progress saves automatically on this device.</p>`;
 }
 

@@ -8,6 +8,8 @@ Practice materials for the ASE P2 Automobile Parts Specialist certification test
 
 **`study-guide.md`** — the written guide: the official content blueprint with question counts per area, a breakdown of the five ASE question formats, condensed review notes covering the published task list, and a 102-question practice exam with an explained answer key.
 
+**`study-guide.html`** — the same guide as a web page, styled to match the trainer and linked from its home screen. Generated from `study-guide.md`, so edit the markdown and regenerate rather than editing the HTML directly.
+
 ## Using the trainer
 
 Open `index.html` directly from disk, or enable GitHub Pages on this repository (Settings → Pages → deploy from the `main` branch, root folder) and the trainer will be live at your Pages URL. That's the easier option for phone practice — bookmark it to the home screen and it behaves like an app.
