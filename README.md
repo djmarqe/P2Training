@@ -4,7 +4,7 @@ Practice materials for the ASE P2 Automobile Parts Specialist certification test
 
 ## What's here
 
-**`index.html`** — the trainer. A single self-contained page with 144 questions and no dependencies, build step, or server required. Open it in any browser, including on a phone. Progress saves locally on the device.
+**`index.html`** — the trainer. A single self-contained page with 159 questions and no dependencies, build step, or server required. Open it in any browser, including on a phone. Progress saves locally on the device.
 
 **`study-guide.md`** — the written guide: the official content blueprint with question counts per area, a breakdown of the five ASE question formats, condensed review notes covering the published task list, and a 102-question practice exam with an explained answer key.
 
