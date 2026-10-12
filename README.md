@@ -32,3 +32,7 @@ Certification also requires two years of relevant parts experience, with appropr
 ## Accuracy
 
 Questions were written against the published ASE task list and standard industry practice. They are practice material, not actual test items, and no affiliation with or endorsement by ASE is claimed or implied. Verify anything that matters against the official ASE study guide at ase.com.
+
+## Audio episodes
+
+**`podcast/`** — The P2 Counter, five audio episodes of about 15 minutes each that walk the whole blueprint as a two-voice conversation, with a rapid-fire review at the end of each. Linked from the trainer's home screen, or open `podcast/index.html`. The scripts are alongside as markdown and the audio was rendered from them with Windows text-to-speech.
