@@ -1,6 +1,6 @@
 # Episode 2: The counter. Customers, catalogs, inventory, and the VIN
 
-Z: This is the P2 Counter, episode two. I'm Zira, Dave's with me, and today we're covering the store side of the test. Customer relations, vehicle identification, catalog skills, inventory, and merchandising.
+Z: This is the P2 Counter, episode two. I'm Ava, Dave's with me, and today we're covering the store side of the test. Customer relations, vehicle identification, catalog skills, inventory, and merchandising.
 
 D: Together that's twenty-five of the seventy-five scored questions, a third of the test. And here's the good news. Most of it is rules you already follow if you've worked a counter. You just need to know the rules the way ASE states them.
 

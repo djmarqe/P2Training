@@ -1,6 +1,6 @@
 # Episode 1: How the test works, and the math that trips people
 
-Z: Welcome to the P2 Counter, a five-part audio study series for the ASE P2 Automobile Parts Specialist test. I'm Zira, and I'll be asking the questions.
+Z: Welcome to the P2 Counter, a five-part audio study series for the ASE P2 Automobile Parts Specialist test. I'm Ava, and I'll be asking the questions.
 
 D: And I'm Dave. I've worked a parts counter for a long time, and I've helped a lot of people get through this test. Over five episodes we're going to cover the whole blueprint, but we're going to spend our time where the points are.
 

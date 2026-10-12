@@ -1,6 +1,6 @@
 # Episode 3: Under the hood. Engine, cooling, fuel, ignition, exhaust, emissions
 
-Z: P2 Counter, episode three. I'm Zira, Dave's here, and we're starting vehicle systems. This is forty of the seventy-five scored questions, so we're splitting it across three episodes.
+Z: P2 Counter, episode three. I'm Ava, Dave's here, and we're starting vehicle systems. This is forty of the seventy-five scored questions, so we're splitting it across three episodes.
 
 D: And inside those forty, ASE publishes the split. Engine mechanical three questions, cooling two, fuel three, ignition three, exhaust two, emissions three. That's sixteen questions in this episode alone. More than the whole customer relations section.
 

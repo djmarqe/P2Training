@@ -1,6 +1,6 @@
 # Episode 5: Wires, cold air, batteries, and the parts nobody studies
 
-Z: P2 Counter, episode five, the last one. I'm Zira, Dave's here. Today we finish vehicle systems with HVAC, electrical, battery and charging, and the miscellaneous category. Then we'll close with how to spend your final week.
+Z: P2 Counter, episode five, the last one. I'm Ava, Dave's here. Today we finish vehicle systems with HVAC, electrical, battery and charging, and the miscellaneous category. Then we'll close with how to spend your final week.
 
 D: Twelve scored questions in this episode. HVAC three, electrical three, battery charging and starting three, and miscellaneous three. And I want to say this up front. Miscellaneous is fasteners, fittings, hose, belts, and body supplies. It's worth exactly as many questions as brakes. Most people never open that section. Open it.
 
