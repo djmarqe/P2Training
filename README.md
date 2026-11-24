@@ -8,7 +8,9 @@ Practice materials for the ASE P2 Automobile Parts Specialist certification test
 
 **`study-guide.md`** — the written guide: the official content blueprint with question counts per area, a breakdown of the five ASE question formats, condensed review notes covering the published task list, and a 102-question practice exam with an explained answer key.
 
-**`study-guide.html`** — the same guide as a web page, styled to match the trainer and linked from its home screen. Generated from `study-guide.md`, so edit the markdown and regenerate rather than editing the HTML directly.
+**`study-guide.html`** — the same guide as a web page, styled to match the trainer and linked from its home screen. Generated from `study-guide.md`, so edit the markdown and regenerate rather than editing the HTML directly. The night-mode `<script>` and dark color block in its `<head>` were added by hand, so carry them over when regenerating.
+
+**Night mode** — every page opens dark by default. "Switch to light mode" at the bottom of the trainer's home screen changes it for all pages on that device.
 
 **`drills.html`** — fresh drills. Picture-ID questions (bolt heads, micrometer, flares, lug seats, alignment, bulbs, belts, VIN) and no-calculator math, generated new on every run so nothing can be answered from memory. Linked from the trainer's home screen. No progress is saved.
 
