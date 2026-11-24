@@ -10,6 +10,8 @@ Practice materials for the ASE P2 Automobile Parts Specialist certification test
 
 **`study-guide.html`** — the same guide as a web page, styled to match the trainer and linked from its home screen. Generated from `study-guide.md`, so edit the markdown and regenerate rather than editing the HTML directly.
 
+**`drills.html`** — fresh drills. Picture-ID questions (bolt heads, micrometer, flares, lug seats, alignment, bulbs, belts, VIN) and no-calculator math, generated new on every run so nothing can be answered from memory. Linked from the trainer's home screen. No progress is saved.
+
 ## Using the trainer
 
 Open `index.html` directly from disk, or enable GitHub Pages on this repository (Settings → Pages → deploy from the `main` branch, root folder) and the trainer will be live at your Pages URL. That's the easier option for phone practice — bookmark it to the home screen and it behaves like an app.

@@ -338,6 +338,7 @@ function home(){
     <button class="btn ghost" onclick="start('area')">Drill one area<small>Pick a weak spot and hammer it</small></button>
     <button class="btn ghost" ${S.missed.length<4?"disabled":""} onclick="start('miss')">Review misses<small>${S.missed.length} question${S.missed.length===1?"":"s"} waiting${S.missed.length<4?" \u00b7 need at least 4":""}</small></button>
     <button class="btn ghost" onclick="start('exam')">Full mock exam<small>75 questions, 90 minutes${S.bestExam!==null?" \u00b7 best "+S.bestExam+"%":""}</small></button>
+    <a class="btn ghost link" href="drills.html">Fresh drills<small>Picture questions and no-calculator math, new every time</small></a>
     <a class="btn ghost link" href="study-guide.html">Study guide<small>Blueprint, content review, and a 102-question practice exam</small></a>
     <a class="btn ghost link" href="podcast/">Listen<small>Five 15-minute audio episodes covering the whole blueprint</small></a>
     <p class="tiny">Progress saves automatically on this device.</p>`;
@@ -371,12 +372,16 @@ function fmt(s){const m=Math.floor(s/60);return m+":"+String(s%60).padStart(2,"0
 
 function question(){
   const q=Q[run.ids[run.i]];
+  // run.ord = display order of the answers. Shuffled so position can't be memorized,
+  // except "A only / B only / Both / Neither", which keeps the fixed order the real test uses.
+  run.ord=q.o.map((_,i)=>i);
+  if(q.o[0]!=="A only")for(let j=run.ord.length-1;j>0;j--){const r=Math.floor(Math.random()*(j+1));[run.ord[j],run.ord[r]]=[run.ord[r],run.ord[j]];}
   app.innerHTML=`
     <div class="bar"><i style="width:${run.i/run.ids.length*100}%"></i></div>
     <div class="meta"><span>${run.i+1} of ${run.ids.length} \u00b7 ${esc(q.t)}</span>
     <span>${run.exam?`<span id="clock" class="clock">${fmt(run.secs)}</span>`:`${run.right} right`}</span></div>
     <p class="qtext">${esc(q.q)}</p>
-    <div id="opts">${q.o.map((o,j)=>`<button class="opt" onclick="answer(${j})"><span class="ltr">${LTR[j]}</span>${esc(o)}</button>`).join("")}</div>
+    <div id="opts">${run.ord.map((oi,j)=>`<button class="opt" onclick="answer(${oi})"><span class="ltr">${LTR[j]}</span>${esc(q.o[oi])}</button>`).join("")}</div>
     <div id="fb"></div>`;
   window.scrollTo(0,0);
 }
@@ -389,9 +394,9 @@ function answer(j){
   if(ok){run.right++; const m=S.missed.indexOf(idx); if(m>-1)S.missed.splice(m,1);}
   else{run.wrong.push(idx); if(!S.missed.includes(idx))S.missed.push(idx);}
   const btns=document.querySelectorAll("#opts .opt");
-  btns.forEach((b,k)=>{b.disabled=true;if(k===q.c)b.classList.add("correct");else if(k===j)b.classList.add("wrong");});
+  btns.forEach((b,k)=>{const oi=run.ord[k];b.disabled=true;if(oi===q.c)b.classList.add("correct");else if(oi===j)b.classList.add("wrong");});
   document.getElementById("fb").innerHTML=
-    `<div class="fb ${ok?"ok":"no"}"><b>${ok?"Correct":"Correct answer: "+LTR[q.c]}</b>${esc(q.e)}</div>
+    `<div class="fb ${ok?"ok":"no"}"><b>${ok?"Correct":"Correct answer: "+LTR[run.ord.indexOf(q.c)]}</b>${esc(q.e)}</div>
      <button class="btn" onclick="next()">${run.i+1===run.ids.length?"See results":"Next question"}</button>`;
   save();
 }
@@ -426,7 +431,7 @@ async function finish(){
          <div class="bp-pct">${byArea[k].c}/${byArea[k].n}</div></div>`).join("")}
     </div>
     ${run.wrong.length?`<div class="panel"><h2>Worth re-reading</h2>
-      ${run.wrong.map(id=>`<div class="miss"><em>${esc(AREA[Q[id].a].n)} \u00b7 ${esc(Q[id].t)}</em>${esc(Q[id].q)}<br><b>${LTR[Q[id].c]}.</b> ${esc(Q[id].o[Q[id].c])}</div>`).join("")}
+      ${run.wrong.map(id=>`<div class="miss"><em>${esc(AREA[Q[id].a].n)} \u00b7 ${esc(Q[id].t)}</em>${esc(Q[id].q)}<br><b>Answer:</b> ${esc(Q[id].o[Q[id].c])}</div>`).join("")}
       </div>`:""}
     <button class="btn" onclick="home()">Done</button>
     ${run.wrong.length>=4?`<button class="btn ghost" onclick="start('miss')">Retry the ones you missed</button>`:""}`;
