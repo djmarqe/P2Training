@@ -63,6 +63,7 @@ svg text.mic{font-size:14px}
 <script>
 /* Every question is generated, so numbers, drawings and answer order change each run.
    Self-check after editing a generator: run this script block under node. With no document it runs selfTest() and prints the result. */
+try{document.documentElement.dataset.theme=localStorage.getItem("asep2:theme")==="light"?"light":"dark"}catch(e){}   // same night-mode setting as the trainer
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)), P=a=>a[R(0,a.length-1)];
 const $=n=>"$"+(Math.round(n*100)/100).toFixed(2), pct=n=>n.toFixed(1).replace(".0","")+"%", f=x=>+x.toFixed(4);
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=R(0,i);[a[i],a[j]]=[a[j],a[i]];}return a;}
