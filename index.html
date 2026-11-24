@@ -24,13 +24,13 @@ function setTheme(t){
     --paper:#EFF1F3; --card:#FFFFFF; --ink:#14191F; --muted:#5C6672;
     --line:#D7DCE1; --blue:#17457A; --blue-dk:#0F3157;
     --ok:#1B7A4B; --ok-bg:#E7F3EC; --no:#B4342A; --no-bg:#FBEAE8;
-    --gold:#E5A823; --track:#DDE2E7; --on-blue:#FFFFFF;
+    --gold:#E5A823; --track:#DDE2E7; --on-blue:#FFFFFF; --metal:#C9D0D8;
   }
   :root[data-theme="dark"]{
     --paper:#12161B; --card:#1B2129; --ink:#E8ECF0; --muted:#9AA5B1;
     --line:#2E3742; --blue:#7FB0EA; --blue-dk:#5E97DB;
     --ok:#7AD49A; --ok-bg:#16301F; --no:#F09A9A; --no-bg:#3A1B1B;
-    --gold:#E5A823; --track:#2A323C; --on-blue:#0B1622;
+    --gold:#E5A823; --track:#2A323C; --on-blue:#0B1622; --metal:#4A5562;
     color-scheme:dark;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -78,6 +78,7 @@ function setTheme(t){
   .bar{height:3px;background:var(--track);border-radius:2px;margin-bottom:12px;overflow:hidden}
   .bar i{display:block;height:100%;background:var(--ink);transition:width .25s}
   .meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:12px}
+  .fig{margin-bottom:12px}
   .qtext{font-size:17.5px;line-height:1.45;font-weight:500;margin-bottom:14px}
   .opt{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);
        border-radius:9px;padding:13px 13px;margin-bottom:8px;font-size:15.5px;line-height:1.4;color:var(--ink)}
@@ -105,6 +106,7 @@ function setTheme(t){
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <div id="app"><p class="sub">Loading your progress&hellip;</p></div>
+<script src="drills.js"></script>
 <script>
 const Q=[
 {a:"A",t:"General operations",q:"A part costs the store $48.00. Store policy is a 40% gross margin. What is the selling price?",o:["$67.20","$76.80","$80.00","$120.00"],c:2,e:"Margin is figured on the selling price, so divide: 48 \u00f7 (1 \u2212 0.40) = $80.00. Multiplying by 1.40 gives a 40% markup, which is a different number."},
@@ -403,6 +405,32 @@ function pick(n,pool){
 }
 function score(i){return (S.missed.includes(i)?-8:0)+(S.seen[i]||0)+Math.random();}
 
+/* ---------- fresh (generated) questions ----------
+   Daily 20 and the mock exam swap about 15% of their bank questions for generated ones from drills.js,
+   area for area, so the blueprint weighting holds. A fresh question gets an id past the end of Q and
+   lives only in run.fresh: it counts toward area accuracy but never enters S.seen or S.missed, because
+   it will not exist again. Questions waiting in the miss list are swapped out last.
+   If drills.js did not load, sessions simply use bank questions only. */
+function qOf(id){return id<Q.length?Q[id]:run.fresh[id-Q.length];}
+function mixFresh(ids){
+  const made=[]; if(typeof DRILLS==="undefined")return made;
+  const want=Math.round(ids.length*.15), count={}, used={}, pool={};
+  ids.forEach(id=>{const a=Q[id].a;count[a]=(count[a]||0)+1;});
+  const waiting=k=>S.missed.includes(ids[k])?1:0;
+  const order=DRILLS.shuffle(ids.map((_,k)=>k)).sort((x,y)=>waiting(x)-waiting(y));
+  const math=order.findIndex(k=>Q[ids[k]].a==="A");   // general operations goes first, so every session gets a math question
+  if(math>0)order.unshift(order.splice(math,1)[0]);
+  for(const k of order){
+    if(made.length>=want)break;
+    const a=Q[ids[k]].a, gens=DRILLS.AREA[a];
+    if(!gens||(used[a]||0)>=Math.ceil(count[a]*.3))continue;
+    if(!pool[a]||!pool[a].length)pool[a]=DRILLS.shuffle(gens.slice());
+    const q=pool[a].pop()(); q.a=a;
+    used[a]=(used[a]||0)+1; ids[k]=Q.length+made.length; made.push(q);
+  }
+  return made;
+}
+
 /* ---------- screens ---------- */
 function home(){
   const t=totals(), overall=t.n?Math.round(t.c/t.n*100):null;
@@ -431,10 +459,10 @@ function home(){
       <p class="bp-note">Bar width is that area's share of the scored test. Vehicle systems is 53% of your grade${overall!==null?`, and you are at ${overall}% overall across ${t.n} answered`:""}.${weak&&acc(weak)<75?` Weakest right now: ${esc(AREA[weak].n.toLowerCase())}.`:""}</p>
     </div>
 
-    <button class="btn" onclick="start('daily')">Daily 20<small>Weighted like the real test. Missed questions come back first.</small></button>
+    <button class="btn" onclick="start('daily')">Daily 20<small>Weighted like the real test, with a few fresh picture and math questions. Missed questions come back first.</small></button>
     <button class="btn ghost" onclick="start('area')">Drill one area<small>Pick a weak spot and hammer it</small></button>
     <button class="btn ghost" ${S.missed.length<4?"disabled":""} onclick="start('miss')">Review misses<small>${S.missed.length} question${S.missed.length===1?"":"s"} waiting${S.missed.length<4?" \u00b7 need at least 4":""}</small></button>
-    <button class="btn ghost" onclick="start('exam')">Full mock exam<small>75 questions, 90 minutes${S.bestExam!==null?" \u00b7 best "+S.bestExam+"%":""}</small></button>
+    <button class="btn ghost" onclick="start('exam')">Full mock exam<small>75 questions, 90 minutes, some fresh${S.bestExam!==null?" \u00b7 best "+S.bestExam+"%":""}</small></button>
     <a class="btn ghost link" href="drills.html">Fresh drills<small>Picture questions and no-calculator math, new every time</small></a>
     <a class="btn ghost link" href="study-guide.html">Study guide<small>Blueprint, content review, and a 102-question practice exam</small></a>
     <a class="btn ghost link" href="podcast/">Listen<small>Five 15-minute audio episodes covering the whole blueprint</small></a>
@@ -454,7 +482,8 @@ function start(mode,areaKey){
   else if(mode==="area"){const pool=Q.map((q,i)=>i).filter(i=>Q[i].a===areaKey);ids=pool.sort((x,y)=>score(x)-score(y)).slice(0,15);}
   else if(mode==="exam"){ids=pick(75,Q.map((q,i)=>i));secs=90*60;}
   else{ids=pick(20,Q.map((q,i)=>i));}
-  run={mode,ids,i:0,right:0,wrong:[],answered:false,area:areaKey,secs,exam:mode==="exam"};
+  const made=(mode==="exam"||mode==="daily")?mixFresh(ids):[];
+  run={mode,ids,fresh:made,i:0,right:0,wrong:[],answered:false,area:areaKey,secs,exam:mode==="exam"};
   if(secs){timer=setInterval(tick,1000);}
   question();
 }
@@ -468,15 +497,16 @@ function tick(){
 function fmt(s){const m=Math.floor(s/60);return m+":"+String(s%60).padStart(2,"0");}
 
 function question(){
-  const q=Q[run.ids[run.i]];
+  const id=run.ids[run.i], q=qOf(id);
   // run.ord = display order of the answers. Shuffled so position can't be memorized,
   // except "A only / B only / Both / Neither", which keeps the fixed order the real test uses.
   run.ord=q.o.map((_,i)=>i);
   if(q.o[0]!=="A only")for(let j=run.ord.length-1;j>0;j--){const r=Math.floor(Math.random()*(j+1));[run.ord[j],run.ord[r]]=[run.ord[r],run.ord[j]];}
   app.innerHTML=`
     <div class="bar"><i style="width:${run.i/run.ids.length*100}%"></i></div>
-    <div class="meta"><span>${run.i+1} of ${run.ids.length} \u00b7 ${esc(q.t)}</span>
+    <div class="meta"><span>${run.i+1} of ${run.ids.length} \u00b7 ${esc(q.t)}${id>=Q.length?" \u00b7 fresh":""}</span>
     <span>${run.exam?`<span id="clock" class="clock">${fmt(run.secs)}</span>`:`${run.right} right`}</span></div>
+    ${q.svg?`<div class="fig">${q.svg}</div>`:""}
     <p class="qtext">${esc(q.q)}</p>
     <div id="opts">${run.ord.map((oi,j)=>`<button class="opt" onclick="answer(${oi})"><span class="ltr">${LTR[j]}</span>${esc(q.o[oi])}</button>`).join("")}</div>
     <div id="fb"></div>`;
@@ -485,11 +515,11 @@ function question(){
 
 function answer(j){
   if(run.answered)return; run.answered=true;
-  const idx=run.ids[run.i], q=Q[idx], ok=j===q.c;
-  S.seen[idx]=(S.seen[idx]||0)+1;
+  const idx=run.ids[run.i], q=qOf(idx), ok=j===q.c, bank=idx<Q.length;
+  if(bank)S.seen[idx]=(S.seen[idx]||0)+1;
   S.area[q.a].n++; if(ok)S.area[q.a].c++;
-  if(ok){run.right++; const m=S.missed.indexOf(idx); if(m>-1)S.missed.splice(m,1);}
-  else{run.wrong.push(idx); if(!S.missed.includes(idx))S.missed.push(idx);}
+  if(ok){run.right++; if(bank){const m=S.missed.indexOf(idx); if(m>-1)S.missed.splice(m,1);}}
+  else{run.wrong.push(idx); if(bank&&!S.missed.includes(idx))S.missed.push(idx);}
   const btns=document.querySelectorAll("#opts .opt");
   btns.forEach((b,k)=>{const oi=run.ord[k];b.disabled=true;if(oi===q.c)b.classList.add("correct");else if(oi===j)b.classList.add("wrong");});
   document.getElementById("fb").innerHTML=
@@ -514,7 +544,7 @@ async function finish(){
   const verdict = pct>=85?"Ready. Keep this up and go sit the test."
     : pct>=70?"Passing range, but thin. Re-read the areas you missed more than once."
     : "Not there yet. Go back to the review notes before you book a date.";
-  const byArea={};run.ids.forEach((id,k)=>{const a=Q[id].a;byArea[a]=byArea[a]||{c:0,n:0};byArea[a].n++;if(!run.wrong.includes(id))byArea[a].c++;});
+  const byArea={};run.ids.forEach((id,k)=>{const a=qOf(id).a;byArea[a]=byArea[a]||{c:0,n:0};byArea[a].n++;if(!run.wrong.includes(id))byArea[a].c++;});
   app.innerHTML=`
     <h1>${run.exam?"Mock exam":"Session"} results</h1>
     <div class="panel">
@@ -528,7 +558,7 @@ async function finish(){
          <div class="bp-pct">${byArea[k].c}/${byArea[k].n}</div></div>`).join("")}
     </div>
     ${run.wrong.length?`<div class="panel"><h2>Worth re-reading</h2>
-      ${run.wrong.map(id=>`<div class="miss"><em>${esc(AREA[Q[id].a].n)} \u00b7 ${esc(Q[id].t)}</em>${esc(Q[id].q)}<br><b>Answer:</b> ${esc(Q[id].o[Q[id].c])}</div>`).join("")}
+      ${run.wrong.map(id=>{const q=qOf(id);return `<div class="miss"><em>${esc(AREA[q.a].n)} \u00b7 ${esc(q.t)}${id>=Q.length?" \u00b7 fresh":""}</em>${esc(q.q)}<br><b>Answer:</b> ${esc(q.o[q.c])}</div>`;}).join("")}
       </div>`:""}
     <button class="btn" onclick="home()">Done</button>
     ${run.wrong.length>=4?`<button class="btn ghost" onclick="start('miss')">Retry the ones you missed</button>`:""}`;

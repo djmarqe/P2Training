@@ -4,7 +4,7 @@ Practice materials for the ASE P2 Automobile Parts Specialist certification test
 
 ## What's here
 
-**`index.html`** — the trainer. A single self-contained page with 238 questions and no dependencies, build step, or server required. Open it in any browser, including on a phone. Progress saves locally on the device.
+**`index.html`** — the trainer. One page with 238 questions and no build step or server required. It loads `drills.js` from the same folder to mix fresh questions into sessions, and still works from the bank alone if that file is missing. Open it in any browser, including on a phone. Progress saves locally on the device.
 
 **`study-guide.md`** — the written guide: the official content blueprint with question counts per area, a breakdown of the five ASE question formats, condensed review notes covering the published task list, and a 102-question practice exam with an explained answer key.
 
@@ -14,13 +14,15 @@ Practice materials for the ASE P2 Automobile Parts Specialist certification test
 
 **`drills.html`** — fresh drills. Picture-ID questions (bolt heads, micrometer, flares, lug seats, alignment, bulbs, belts, VIN) and no-calculator math, generated new on every run so nothing can be answered from memory. Linked from the trainer's home screen. No progress is saved.
 
+**`drills.js`** — the question generators behind the fresh drills, shared by `drills.html` and the trainer. Run `node drills.js` to self-test them after an edit.
+
 ## Using the trainer
 
 Open `index.html` directly from disk, or enable GitHub Pages on this repository (Settings → Pages → deploy from the `main` branch, root folder) and the trainer will be live at your Pages URL. That's the easier option for phone practice — bookmark it to the home screen and it behaves like an app.
 
 Four modes:
 
-- **Daily 20** — a set weighted to match the real blueprint, with previously missed questions pushed to the front
+- **Daily 20** — a set weighted to match the real blueprint, with previously missed questions pushed to the front. Three of the 20 are fresh generated questions (at least one math), and the mock exam gets 11 of its 75. Fresh questions count toward the accuracy bars but cannot come back in Review misses, since each one exists only once
 - **Drill one area** — 15 questions from a single content area
 - **Review misses** — a set built only from questions answered wrong
 - **Full mock exam** — 75 questions on a 90-minute timer, matching test conditions
